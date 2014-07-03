@@ -5,6 +5,10 @@ https://github.com/mindplay-dk/funnel
 
 [![Build Status](https://travis-ci.org/mindplay-dk/funnel.png)](https://travis-ci.org/mindplay-dk/funnel)
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mindplay-dk/funnel/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mindplay-dk/funnel/?branch=master)
+
+[![Code Coverage](https://scrutinizer-ci.com/g/mindplay-dk/funnel/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mindplay-dk/funnel/?branch=master)
+
 This is simple event sink (pub/sub) facility for PHP 5.3+ which attempts to
 improve on the performance and robustness of event facilities in general.
 

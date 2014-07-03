@@ -16,5 +16,8 @@
         "psr-0": {
             "mindplay\\funnel": ""
         }
+    },
+    "require-dev": {
+        "phpunit/php-code-coverage": "3.0.*@dev"
     }
 }

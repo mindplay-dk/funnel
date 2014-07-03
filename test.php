@@ -2,6 +2,8 @@
 
 require __DIR__ . '/mindplay/funnel/EventSink.php';
 
+require __DIR__ . '/vendor/autoload.php';
+
 use mindplay\funnel\EventSink;
 
 class TestEvent
@@ -14,6 +16,10 @@ class PriorityTestEvent extends TestEvent
 {}
 
 header('Content-type: text/plain');
+
+if (coverage()) {
+    coverage()->filter()->addDirectoryToWhitelist(__DIR__ . '/mindplay/funnel');
+}
 
 test(
     'EventSink notifies listeners in sequence',
@@ -120,6 +126,16 @@ test(
     }
 );
 
+if (coverage()) {
+    $report = new PHP_CodeCoverage_Report_Text(10, 90, false, false);
+
+    echo $report->process(coverage(), false);
+
+    $report = new PHP_CodeCoverage_Report_Clover();
+
+    $report->process(coverage(), 'build/logs/clover.xml');
+}
+
 exit(status());
 
 // https://gist.github.com/mindplay-dk/4260582
@@ -133,7 +149,9 @@ function test($name, Closure $function)
     echo "\n=== $name ===\n\n";
 
     try {
+        coverage($name);
         $function();
+        coverage();
     } catch (Exception $e) {
         ok("UNEXPECTED EXCEPTION:\n\n$e", false);
     }
@@ -198,4 +216,40 @@ function status($status = null) {
     }
     
     return $failures;
+}
+
+/**
+ * @param string|null $text description (to start coverage); or null (to stop coverage)
+ * @return PHP_CodeCoverage|null
+ */
+function coverage($text = null)
+{
+    static $coverage = null;
+    static $running = false;
+
+    if ($coverage === false) {
+        return null; // code coverage unavailable
+    }
+
+    if ($coverage === null) {
+        try {
+            $coverage = new PHP_CodeCoverage;
+        } catch (PHP_CodeCoverage_Exception $e) {
+            echo "# Notice: no code coverage run-time available\n";
+            $coverage = false;
+            return null;
+        }
+    }
+
+    if (is_string($text)) {
+        $coverage->start($text);
+        $running = true;
+    } else {
+        if ($running) {
+            $coverage->stop();
+            $running = false;
+        }
+    }
+
+    return $coverage;
 }
