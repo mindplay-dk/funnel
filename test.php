@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__ . '/mindplay/funnel/EventSink.php';
-
 require __DIR__ . '/vendor/autoload.php';
 
 use mindplay\funnel\EventSink;
@@ -18,7 +16,7 @@ class PriorityTestEvent extends TestEvent
 header('Content-type: text/plain');
 
 if (coverage()) {
-    coverage()->filter()->addDirectoryToWhitelist(__DIR__ . '/mindplay/funnel');
+    coverage()->filter()->addDirectoryToWhitelist(__DIR__ . '/src');
 }
 
 test(
